@@ -1,6 +1,6 @@
 let b=[];let bi=6,limit,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
-//let bound=[70,50,380,580];
-let bound=[370,100,680,630];
+let bound=[70,50,380,580];
+//let bound=[370,100,680,630];
 bound[4]=(bound[2]-bound[0]);bound[5]=bound[3]-bound[1];
 let balls=[],holes=[],future=[],sup=0,fh,fh2;
 
