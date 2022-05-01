@@ -1,6 +1,6 @@
 let b=[];let bi=6,limit,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
-let bound=[70,50,380,580];
-//let bound=[370,100,680,630];
+let bound=[70,50,280,580];
+//let bound=[270,100,680,630];
 bound[4]=(bound[2]-bound[0]);bound[5]=bound[3]-bound[1];
 let balls=[],holes=[],future=[],sup=0,fh,fh2;
 
@@ -16,15 +16,21 @@ function setup() {
   else b[i]= new bubble(bound[0]+(bound[4])/2+(balls[sup++])*radius,bound[1]+(bound[5])/4+bi-(balls[sup++])*radius,i);
 
  may= createP('');
- futureball=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,-1);
+ futureball=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,'future ball');
  fh=new bubble(0,0,-2);fh2=new bubble(0,0,0);
 }
  
 let x1 = 0,  x2 = 0,  v1 = 0,  v2 = 0,
   y=500,
   t = 0,  max = 0,  min = 0;
-
+ 
+  function mouseReleased(){
+    if(abs(b[0].v1*b[0].v2)<0.01){b[0].throws();b[0].mov=1;}
+  }
 function draw() {
+
+
+  
   ke=0;frameC=frameCount;
   may.html(int(frameRate()));
   y = height;
@@ -41,8 +47,8 @@ colorMode(RGB);
  w=0;
  for(let i=0;i<holex;i++)for(let j=0;j<holey;j++)ellipse(holes[w++],holes[w++],holedia);//holes
 
- if(abs(b[0].v1*b[0].v2)<0.01){b[0].throws();}
- if(b[0].mov==1){ b[0].move();}b[0].sinks();if(b[0].mov==1) b[0].makeup();//cue things
+ if(b[0].mov==1){ b[0].move();}b[0].sinks();
+ if(b[0].mov==1) b[0].makeup();//cue things
  if(b[0].mov==-1){fh2.x1=mouseX;fh2.x2=mouseY;fh2.makeup();}
 
  //cue prediction
@@ -78,6 +84,7 @@ for(i=0;i<50;i+=2){
 } 
 
 
+
 }
 
 //class bubble-=-=-=-=-=-=-=-=-=-=--=-=-=-
@@ -100,8 +107,9 @@ move(){
   {this.x1 += this.v1;this.x2 += this.v2;}//move
 }
 throws(){
-  if (mouseIsPressed || this.mov==2)//mov=2 for futureball
+  if (this.id==0 || mouseIsPressed || this.mov==2)//mov=2 for futureball
    {
+    if(this.id==0) print("throws-"+this.id+"mousepressed-"+mouseIsPressed);
     this.v1 = mina(( this.x1-mouseX) / 7,20);
     this.v2 = mina(( this.x2-mouseY) / 7,20);
     if(this.id==0 && this.mov==-1){this.x1=mouseX;this.x2=mouseY;this.v1=0;this.v2=0;this.mov=1;}
