@@ -1,14 +1,44 @@
 let b=[];let bi=6,limit,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
-let bound=[70,50,280,580];
-//let bound=[270,100,680,630];
+let bound=[70,50,380,580];
 bound[4]=(bound[2]-bound[0]);bound[5]=bound[3]-bound[1];
 let balls=[],holes=[],future=[],sup=0,fh,fh2;
 
 for(let i=1;i<bi;i++)for(let j=0;j<i;j++){balls[sup++]=(1-i)/2+j;balls[sup++]=i; }
 
 for(let i=0;i<holex;i++)for(let j=0;j<holey;j++){holes[w++]=bound[0]+bound[4]*i/(holex-1);holes[w++]=bound[1]+bound[5]*j/(holey-1);}
+
+let ball,ball2,se,se2,bar,bar2;
+function preload(){
+  ball = loadShader('shader/ball.vert','shader/ball.frag');
+  ball2 = loadShader('shader/ball.vert','shader/ball.frag');
+}
 function setup() {
-  createCanvas(windowWidth-50, windowHeight-50);
+  createCanvas(windowWidth-50, windowHeight-50,WEBGL);
+
+  se2=createGraphics(500,500,WEBGL);
+  se2.noStroke();
+  se2.shader(ball2);
+  se2.quad(1,1,1,-1,-1,-1,-1,1);
+
+  se=createGraphics(500,500,WEBGL);
+  se.noStroke();
+  se.shader(ball);
+  se.ellipse(1,1,1);
+  
+  bar=createGraphics(100,100);
+  for(let i=0;i<100;i++){
+    bar.stroke(255*cos(i*PI/200),70);
+    bar.line(i,0,i,100);
+  }
+  bar2=createGraphics(100,100);
+  for(let i=0;i<100;i++){
+    bar2.stroke(255*sin(i*PI/200),70);
+    bar2.line(0,i,100,i);
+  }
+ 
+  imageMode(CENTER);
+
+ 
   limit=sup/2+1;sup=0;
   b[0]=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,0);
   for(let i=1;i<limit;i++)
@@ -28,24 +58,38 @@ let x1 = 0,  x2 = 0,  v1 = 0,  v2 = 0,
     if(abs(b[0].v1*b[0].v2)<0.01){b[0].throws();b[0].mov=1;}
   }
 function draw() {
+translate(-width/2,-height/2);
 
-
-  
   ke=0;frameC=frameCount;
   may.html(int(frameRate()));
   y = height;
- background(250);
-colorMode(RGB);
- fill(240,190,160);
- rect(bound[0]-holedia/2,bound[1]-holedia/2,bound[4]+holedia,bound[5]+holedia,5);//draws side bar
-
- fill(100,250,100);
- stroke(0);
- rect(bound[0],bound[1],bound[4],bound[5]);//draws green
+ background(70);
  
- fill(0);
- w=0;
- for(let i=0;i<holex;i++)for(let j=0;j<holey;j++)ellipse(holes[w++],holes[w++],holedia);//holes
+colorMode(RGB);
+
+//draws side bar
+ fill(240,190,160);
+ rect(bound[0]-holedia/2,bound[1]-holedia/2,bound[4]+holedia,bound[5]+holedia);
+ image(bar,bound[0]-holedia/4,bound[1]+bound[5]/2,holedia/2,bound[5]+holedia);
+ image(bar,bound[2]+holedia/4,bound[1]+bound[5]/2,holedia/2,bound[5]+holedia);
+ image(bar2,bound[0]+bound[4]/2,bound[1],bound[4],holedia);
+ image(bar2,bound[0]+bound[4]/2,bound[1]+bound[5],bound[4],holedia);
+
+
+ //draws green
+ fill(100,250,100);
+ rect(bound[0],bound[1],bound[4],bound[5]);
+ image(se2,bound[0]+bound[4]/2,bound[1]+bound[5]/2,bound[4],bound[5]);
+
+
+
+
+ fill(0); 
+ w=0;let hx1,hx2;
+ for(let i=0;i<holex;i++)for(let j=0;j<holey;j++)
+ {hx1=w++;hx2=w++;
+   ellipse(holes[hx1],holes[hx2],holedia);//holes
+}
 
  if(b[0].mov==1){ b[0].move();}b[0].sinks();
  if(b[0].mov==1) b[0].makeup();//cue things
@@ -83,7 +127,7 @@ for(i=0;i<50;i+=2){
  b[i].makeup(); 
 } 
 
-
+//image(se2,mouseX,mouseY,bound[4],bound[5]);
 
 }
 
@@ -132,12 +176,17 @@ else {this.v1=0;this.v2=0;this.mov=-1;}}
 }//end of sinks
 
 makeup(){
-  stroke(40);
+  noStroke();
   
   colorMode(HSB);
-  fill((360/limit * this.id-1),50,100);
+  fill((360*( this.id-1)/limit),50,100);
     if(this.id==0)fill(255);
+
   ellipse(this.x1, this.x2, radius);
+  // texture(se);
+  // ellipse(this.x1, this.x2, radius);
+ 
+  image(se,this.x1, this.x2,radius,radius);
 }
 }
 
