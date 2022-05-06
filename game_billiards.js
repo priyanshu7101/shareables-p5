@@ -1,4 +1,4 @@
-let b=[];let bi=6,limit,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
+let b=[];let bi=6,limits,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
 let bound=[70,50,380,580];
 bound[4]=(bound[2]-bound[0]);bound[5]=bound[3]-bound[1];
 let balls=[],holes=[],future=[],sup=0,fh,fh2;
@@ -39,9 +39,9 @@ function setup() {
   imageMode(CENTER);
 
  
-  limit=sup/2+1;sup=0;
+  limits=sup/2+1;sup=0;
   b[0]=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,0);
-  for(let i=1;i<limit;i++)
+  for(let i=1;i<limits;i++)
  if(bi>8) b[i]= new bubble(random(bound[0]+radius/2,bound[2]-radius/2),random(bound[1]+radius/2,bound[3]-radius/2),i);
   else b[i]= new bubble(bound[0]+(bound[4])/2+(balls[sup++])*radius,bound[1]+(bound[5])/4+bi-(balls[sup++])*radius,i);
 
@@ -100,7 +100,7 @@ futureball.x1=b[0].x1;futureball.x2=b[0].x2;futureball.mov=2;futureball.throws()
 w=0;checkhit=0;
 future[w++]=futureball.x1;future[w++]=futureball.x2;
 for(i=0;i<50;i+=2){
-  for(let j=1;j<limit;j++)
+  for(let j=1;j<limits;j++)
   {fh.x1=b[j].x1;fh.x2=b[j].x2;
     fh.v1=b[j].v1;fh.v2=b[j].v2;
    fh2.v1=b[j].v1;fh2.v2=b[j].v2;
@@ -119,8 +119,8 @@ for(i=0;i<50;i+=2){
 }
 
  
- for(let i=1;i<limit;i++){//balls all functions
- for(let j=0;j<limit;j++)
+ for(let i=1;i<limits;i++){//balls all functions
+ for(let j=0;j<limits;j++)
  if(i!=j)
  b[i].hits(b[j]);
  if(b[i].mov==1)  { b[i].move();b[i].sinks();}
@@ -179,7 +179,7 @@ makeup(){
   noStroke();
   
   colorMode(HSB);
-  fill((360*( this.id-1)/limit),50,100);
+  fill((360*( this.id-1)/limits),50,100);
     if(this.id==0)fill(255);
 
   ellipse(this.x1, this.x2, radius);
