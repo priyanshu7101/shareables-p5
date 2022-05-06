@@ -9,8 +9,8 @@ for(let i=0;i<holex;i++)for(let j=0;j<holey;j++){holes[w++]=bound[0]+bound[4]*i/
 
 let ball,ball2,se,se2,bar,bar2;
 function preload(){
-  ball = loadShader('shader/ball.vert','shader/ball.frag');
-  ball2 = loadShader('shader/ball.vert','shader/ball.frag');
+  ball = loadShader('ball.vert','ball.frag');
+  ball2 = loadShader('ball.vert','ball.frag');
 }
 function setup() {
   createCanvas(windowWidth-50, windowHeight-50,WEBGL);
