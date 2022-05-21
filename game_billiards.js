@@ -1,5 +1,5 @@
-let b=[];let bi=6,limits,radius=20,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0.0;
-let bound=[70,50,380,580];
+let b=[];let bi=6,limits,radius=15,holedia=radius*1.7,ke=0,frameC,w=0,holex=2,holey=3,posx=0,posy=1,checkhit,gravity=0;
+let bound=[70,50,300,500];
 bound[4]=(bound[2]-bound[0]);bound[5]=bound[3]-bound[1];
 let balls=[],holes=[],future=[],sup=0,fh,fh2;
 
@@ -8,22 +8,31 @@ for(let i=1;i<bi;i++)for(let j=0;j<i;j++){balls[sup++]=(1-i)/2+j;balls[sup++]=i;
 for(let i=0;i<holex;i++)for(let j=0;j<holey;j++){holes[w++]=bound[0]+bound[4]*i/(holex-1);holes[w++]=bound[1]+bound[5]*j/(holey-1);}
 
 let ball,ball2,se,se2,bar,bar2;
-function preload(){
-  ball = loadShader('ball.vert','ball.frag');
-  ball2 = loadShader('ball.vert','ball.frag');
-}
-function setup() {
-  createCanvas(windowWidth-50, windowHeight-50,WEBGL);
 
+let vs='precision highp float;varying vec2 vPos;attribute vec3 aPosition;'+
+'void main(){ '+
+' vPos =aPosition.xy;   vPos=vPos*2.0-1.0; '+
+'  gl_Position=vec4(vPos,aPosition.z,1.0);   }';
+let fs='precision highp float; varying vec2 vPos;'+
+'void main(){'+
+'vec2 t=vPos;t=(t+1.0)*0.5;'+
+'float n=1.-t.x*t.x-t.y*t.y;n=clamp(n,0.,1.);'+
+'gl_FragColor = vec4(n,n,n,0.3);}';
+
+function setup() {
+  createCanvas(bound[2]+50, bound[3]+60,WEBGL);
+  
   se2=createGraphics(500,500,WEBGL);
   se2.noStroke();
+  ball2 = se2.createShader(vs,fs);
   se2.shader(ball2);
   se2.quad(1,1,1,-1,-1,-1,-1,1);
 
   se=createGraphics(500,500,WEBGL);
   se.noStroke();
+  ball = se.createShader(vs,fs);
   se.shader(ball);
-  se.ellipse(1,1,1);
+  se.ellipse(1,1,1,1,50);
   
   bar=createGraphics(100,100);
   for(let i=0;i<100;i++){
@@ -45,7 +54,7 @@ function setup() {
  if(bi>8) b[i]= new bubble(random(bound[0]+radius/2,bound[2]-radius/2),random(bound[1]+radius/2,bound[3]-radius/2),i);
   else b[i]= new bubble(bound[0]+(bound[4])/2+(balls[sup++])*radius,bound[1]+(bound[5])/4+bi-(balls[sup++])*radius,i);
 
- may= createP('');
+ //may= createP('');
  futureball=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,'future ball');
  fh=new bubble(0,0,-2);fh2=new bubble(0,0,0);
 }
@@ -61,7 +70,7 @@ function draw() {
 translate(-width/2,-height/2);
 
   ke=0;frameC=frameCount;
-  may.html(int(frameRate()));
+ // may.html(int(frameRate()));
   y = height;
  background(70);
  
