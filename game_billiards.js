@@ -54,7 +54,7 @@ function setup() {
  if(bi>8) b[i]= new bubble(random(bound[0]+radius/2,bound[2]-radius/2),random(bound[1]+radius/2,bound[3]-radius/2),i);
   else b[i]= new bubble(bound[0]+(bound[4])/2+(balls[sup++])*radius,bound[1]+(bound[5])/4+bi-(balls[sup++])*radius,i);
 
- //may= createP('');
+ may= createP('');
  futureball=new bubble(bound[0]+(bound[4])/2,bound[1]+(bound[5])*3/4,'future ball');
  fh=new bubble(0,0,-2);fh2=new bubble(0,0,0);
 }
@@ -70,7 +70,7 @@ function draw() {
 translate(-width/2,-height/2);
 
   ke=0;frameC=frameCount;
- // may.html(int(frameRate()));
+  may.html(int(frameRate()));
   y = height;
  background(70);
  
